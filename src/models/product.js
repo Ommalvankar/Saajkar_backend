@@ -1,50 +1,77 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const productSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema(
+{
     name: {
         type: String,
-        required: [true, 'Product name is required'],
+        required: true,
         trim: true
     },
+
     description: {
         type: String,
-        required: [true, 'Product description is required']
+        required: true
     },
+
     category: {
-        type: String,
-        required: true,
-        enum: ['Temple Jewelry', 'Custom Rings', 'Necklaces', 'Earrings'] 
-    },
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
+    required: true
+},
     price: {
         type: Number,
-        required: [true, 'Product price is required']
-    },
-    materials: {
-        type: [String], // e.g., ["22k Gold", "Kundan", "Ruby"]
         required: true
     },
-    weightInGrams: {
-        type: Number,
-        required: true
-    },
-    dimensions: {
-        type: String, // e.g., "Length: 18 inches"
-    },
-    careInstructions: {
-        type: String,
-        default: 'Store in a dry, airtight box. Keep away from perfumes and moisture.'
-    },
-    images: {
-        type: [String], // Array of URLs for high-res model photos and macro shots
-        required: true
-    },
-    purityCertificate: {
-        type: String, // URL to hallmark certification image if applicable
-    },
-    inStock: {
-        type: Boolean,
-        default: true
-    }
-}, { timestamps: true }); // Automatically adds createdAt and updatedAt fields
 
-module.exports = mongoose.model('Product', productSchema);
+    discountPrice: {
+        type: Number,
+        default: 0
+    },
+
+    images: [
+    {
+        public_id: {
+            type: String,
+            required: true
+        },
+        url: {
+            type: String,
+            required: true
+        }
+    }
+],
+
+    material: {
+        type: String,
+        default: "Handcrafted"
+    },
+
+    stock: {
+        type: Number,
+        default: 0
+    },
+
+    featured: {
+        type: Boolean,
+        default: false
+    },
+
+    status: {
+        type: String,
+        enum: ["Available", "Out of Stock"],
+        default: "Available"
+    },
+
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }
+
+},
+{
+    timestamps: true
+});
+
+module.exports =
+    mongoose.models.Product ||
+    mongoose.model("Product", productSchema);

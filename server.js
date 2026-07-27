@@ -1,18 +1,38 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config();
+require("dotenv").config();
 
-const app = express();
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+
+const app = express();   // <-- Move this here
+
+const cartRoutes = require("./src/routes/cartRoutes");
+const categoryRoutes = require("./src/routes/categoryRoutes");
+const uploadRoutes = require("./src/routes/uploadRoutes");
+const wishlistRoutes = require("./src/routes/wishlistRoutes");
+const orderRoutes = require("./src/routes/orderRoutes");
+
 const PORT = process.env.PORT || 8000;
 
+// Middleware
 app.use(cors());
-app.use(express.json()); 
+app.use(express.json());
 
-// --- ROUTE REGISTRATION ---
-// These lines tell your server: "If the URL starts with /api/auth, go to authRoutes.js"
+// Temporary test route
+app.get("/", (req, res) => {
+    res.send("Saajkar Backend Running");
+});
+
+app.use(cors());
+app.use(express.json());
+
 app.use('/api/auth', require('./src/routes/authRoutes'));
-app.use('/api/products', require('./src/routes/productRoutes')); // 👈 THIS WAS MISSING!
+app.use('/api/products', require('./src/routes/productRoutes'));
+app.use('/api/upload', uploadRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/cart', cartRoutes);   // ✅ Add this line
+app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.get('/api', (req, res) => {
     res.json({ message: "🚀 Saajkar API Engine is live!" });

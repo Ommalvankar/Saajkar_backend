@@ -1,6 +1,6 @@
 const Order = require("../models/order");
 const Cart = require("../models/cart");
-const Product = require("../models/Product");
+const Product = require("../models/product");
 
 // @desc Create Order
 // @route POST /api/orders

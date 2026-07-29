@@ -1,5 +1,5 @@
 const Cart = require("../models/cart");
-const Product = require("../models/Product");
+const Product = require("../models/product");
 
 // @desc Add product to cart
 // @route POST /api/cart

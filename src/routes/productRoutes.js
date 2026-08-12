@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const { protect } = require("../middleware/authMiddleware");
 const admin = require("../middleware/adminMiddleware");
-
+cost upload = reqiure("../middleware/upload");
 const {
     createProduct,
     getAllProducts,
@@ -15,7 +15,7 @@ const {
 router.delete("/:id",protect, admin, deleteProduct);
 
 // Create Product
-router.post("/", protect, admin, createProduct);
+router.post("/", protect, admin, upload.single("image"),createProduct);
 
 // Get All Products
 router.get("/", getAllProducts);

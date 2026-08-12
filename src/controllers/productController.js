@@ -1,25 +1,114 @@
 const Product = require("../models/product");
-
+const cloudinary = require("../config/cloudinary");
 // @desc    Create a new product
 // @route   POST /api/products
 exports.createProduct = async (req, res) => {
+
     try {
-        const product = await Product.create(req.body);
+
+        const {
+            name,
+            description,
+            category,
+            price,
+            discountPrice,
+            material,
+            stock,
+            featured,
+            status
+        } = req.body;
+
+
+        // Check image
+        if (!req.file) {
+
+            return res.status(400).json({
+                success: false,
+                message: "Product image is required"
+            });
+
+        }
+
+
+        // Upload image to Cloudinary
+        const uploadResult = await new Promise(
+            (resolve, reject) => {
+
+                const stream =
+                    cloudinary.uploader.upload_stream(
+                        {
+                            folder: "saajkar-products"
+                        },
+                        (error, result) => {
+
+                            if (error) {
+                                reject(error);
+                            } else {
+                                resolve(result);
+                            }
+
+                        }
+                    );
+
+                stream.end(req.file.buffer);
+
+            }
+        );
+
+
+        // Create product
+        const product = await Product.create({
+
+            name,
+            description,
+            category,
+            price,
+            discountPrice,
+            material,
+            stock,
+            featured,
+            status,
+
+            images: [
+                {
+                    public_id: uploadResult.public_id,
+                    url: uploadResult.secure_url
+                }
+            ],
+
+            createdBy: req.user._id
+
+        });
+
 
         res.status(201).json({
+
             success: true,
+
             message: "Product created successfully",
+
             product
+
         });
+
 
     } catch (error) {
-        console.error("Create Product Error:", error.message);
+
+        console.error(
+            "Create Product Error:",
+            error
+        );
 
         res.status(500).json({
+
             success: false,
+
             message: error.message
+
         });
+
     }
+
 };
 
 // @desc    Get all products with search, filter, sort & pagination

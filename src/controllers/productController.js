@@ -287,3 +287,20 @@ exports.deleteProduct = async (req, res) => {
 
     }
 };
+exports.deleteAllProducts = async (req, res) => {
+    try {
+        const result = await Product.deleteMany({});
+
+        res.status(200).json({
+            success: true,
+            message: "All products deleted successfully",
+            deletedCount: result.deletedCount
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};

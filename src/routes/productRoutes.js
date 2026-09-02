@@ -9,11 +9,23 @@ const {
     getAllProducts,
     getSingleProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    deleteAllProducts
 } = require("../controllers/productController");
 
-router.delete("/:id",protect, admin, deleteProduct);
+router.delete(
+    "/delete-all",
+    protect,
+    admin,
+    deleteAllProducts
+);
 
+router.delete(
+    "/:id",
+    protect,
+    admin,
+    deleteProduct
+);
 // Create Product
 router.post("/", protect, admin, upload.single("image"),createProduct);
 

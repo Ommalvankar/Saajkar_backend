@@ -15,6 +15,7 @@ exports.createProduct = async (req, res) => {
             material,
             stock,
             featured,
+            bestSeller,
             status
         } = req.body;
 
@@ -66,7 +67,8 @@ exports.createProduct = async (req, res) => {
             discountPrice,
             material,
             stock,
-            featured,
+            featured:featured featured === "true" || featured === true,
+            bestSeller: bestSeller === "true" || bestSeller === true,
             status,
 
             images: [

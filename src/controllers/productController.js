@@ -67,7 +67,7 @@ exports.createProduct = async (req, res) => {
             discountPrice,
             material,
             stock,
-            featured:featured featured === "true" || featured === true,
+            featured:featured === "true" || featured === true,
             bestSeller: bestSeller === "true" || bestSeller === true,
             status,
 

@@ -11,6 +11,15 @@ const {
     clearCart
 } = require("../controllers/cartController");
 
+console.log("CART ROUTES CHECK:", {
+    protect: typeof protect,
+    addToCart: typeof addToCart,
+    getCart: typeof getCart,
+    updateCart: typeof updateCart,
+    removeFromCart: typeof removeFromCart,
+    clearCart: typeof clearCart
+});
+
 router.post("/", protect, addToCart);
 router.get("/", protect, getCart);
 router.put("/", protect, updateCart);

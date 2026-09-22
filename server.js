@@ -110,4 +110,4 @@ app.listen(PORT, () => {
     console.log(
         `🚀 Server safely executing on port ${PORT}`
     );
-});s
+});

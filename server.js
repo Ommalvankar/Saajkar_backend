@@ -4,13 +4,15 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-const app = express();   // <-- Move this here
+const app = express();
 
+// Routes
 const cartRoutes = require("./src/routes/cartRoutes");
 const categoryRoutes = require("./src/routes/categoryRoutes");
 const uploadRoutes = require("./src/routes/uploadRoutes");
 const wishlistRoutes = require("./src/routes/wishlistRoutes");
 const orderRoutes = require("./src/routes/orderRoutes");
+const customizationRoutes = require("./src/routes/customizationRoutes");
 
 const PORT = process.env.PORT || 8000;
 
@@ -18,30 +20,94 @@ const PORT = process.env.PORT || 8000;
 app.use(cors());
 app.use(express.json());
 
-// Temporary test route
+// ===============================
+// HOME ROUTE
+// ===============================
+
 app.get("/", (req, res) => {
     res.send("Saajkar Backend Running");
 });
 
-app.use(cors());
-app.use(express.json());
+// ===============================
+// API ROUTES
+// ===============================
 
-app.use('/api/auth', require('./src/routes/authRoutes'));
-app.use('/api/products', require('./src/routes/productRoutes'));
-app.use('/api/upload', uploadRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/cart', cartRoutes);   // ✅ Add this line
-app.use("/api/wishlist", wishlistRoutes);
-app.use("/api/orders", orderRoutes);
+app.use(
+    "/api/auth",
+    require("./src/routes/authRoutes")
+);
 
-app.get('/api', (req, res) => {
-    res.json({ message: "🚀 Saajkar API Engine is live!" });
+app.use(
+    "/api/products",
+    require("./src/routes/productRoutes")
+);
+
+app.use(
+    "/api/upload",
+    uploadRoutes
+);
+
+app.use(
+    "/api/categories",
+    categoryRoutes
+);
+
+app.use(
+    "/api/cart",
+    cartRoutes
+);
+
+app.use(
+    "/api/wishlist",
+    wishlistRoutes
+);
+
+app.use(
+    "/api/orders",
+    orderRoutes
+);
+
+// Customization Requests
+app.use(
+    "/api/customizations",
+    customizationRoutes
+);
+
+// ===============================
+// API STATUS
+// ===============================
+
+app.get("/api", (req, res) => {
+    res.json({
+        success: true,
+        message: "🚀 Saajkar API Engine is live!"
+    });
 });
 
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('✅ MongoDB Cloud Cluster successfully connected!'))
-    .catch(err => console.error('❌ Database Handshake Failed:', err.message));
+// ===============================
+// MONGODB CONNECTION
+// ===============================
+
+mongoose
+    .connect(process.env.MONGO_URI)
+    .then(() => {
+        console.log(
+            "✅ MongoDB Cloud Cluster successfully connected!"
+        );
+    })
+    .catch((error) => {
+        console.error(
+            "❌ Database Handshake Failed:",
+            error.message
+        );
+    });
+
+// ===============================
+// START SERVER
+// ===============================
 
 app.listen(PORT, () => {
-    console.log(`🚀 Server safely executing on port ${PORT}`);
-});
+    console.log(
+        `🚀 Server safely executing on port ${PORT}`
+    );
+});s
